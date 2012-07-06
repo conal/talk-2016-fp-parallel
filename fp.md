@@ -2,9 +2,7 @@
 % Conal Elliott
 % July 10, 2012
 
-# Why & What
-
-## Why functional programming?
+# Why functional programming?
 
 *   \wow{Parallelism}
     \note{Parallel-friendly}
@@ -14,14 +12,14 @@
     \note{Captures high-level programming patterns formally for reuse.
     Code is a liability.}
 
-## What is functional programming?
+# What is functional programming?
 
 *   Value-oriented
     \note{as opposed to action-oriented}
 *   Like arithmetic on big values
     \note{strings, sequences, streams, trees, images, geometry, functions.}
 
-## Finishes a shift that Fortran began
+# Finishes a shift that Fortran began
 
 *   Machine/assembly: statements only
     \note{Built up by sequencing.}
@@ -31,13 +29,11 @@
 *   Functional: expressions only
     \note{With expressions like these, who needs statements?}
 
-# Parallelism
-
-## What makes a language good for parallelism?
+# What makes a language good for parallelism?
 
 ...
 
-## What makes a language *bad* for parallelism?
+# What makes a language *bad* for parallelism?
 
 *   Sequential bias
     *   Primitive: assignment (state change)
@@ -46,13 +42,13 @@
 *   *Over-linearizes* algorithms.
 *   Hard to isolate accidental sequentiality.
 
-## Applications perform squillions of simple computations.
+# Applications perform zillions of simple computations.
 
 *   Compute all at once?
 *   Oops -- data dependencies.
 *   Minimize dependencies!
 
-## Dependencies
+# Dependencies
 
 *   Three sources:
     1.   Problem
@@ -60,12 +56,12 @@
     3.   Language
 *   Goals: eliminate #3, and reduce #2.
 
-## Dependency in imperative languages
+# Dependency in imperative languages
 
 *   Built into sequencing: $A\, ; B$
 *   Semantics: $B$ begins where $A$ ends.
 
-## Idea: remove *all* state
+# Idea: remove *all* state
 
 *   And, with it, remove
     *   mutation,
@@ -78,9 +74,7 @@
     *   ... including optimization/transformation.
 *   No loss of expressiveness!
 
-# Examples
-
-## Sequential sum
+# Sequential sum
 
 C:
 
@@ -101,7 +95,7 @@ where
 
 > foldl (+) 0 [a,b,...,z] == (...((0 + a) + b) ...) + z
 
-## Parallel sum -- how?
+# Parallel sum -- how?
 
 Left-associated sum: $$(\ldots ((0 + a) + b) \ldots) + z$$
 
@@ -116,7 +110,7 @@ How to parallelize?
 \pause
 *   *When valid?*
 
-## Associative folds
+# Associative folds
 
 *Monoid*: type with associative operator & identity.
 
@@ -128,7 +122,7 @@ Not just lists:
 
 Balanced data structures lead to balanced parallelism.
 
-## Balance
+# Balance
 
 Contrast:
 
@@ -140,7 +134,7 @@ with
 
 Can enforce tree balance with fancier types.
 
-## Trickier algorithm: prefix sums
+# Trickier algorithm: prefix sums
 
 C:
 
@@ -160,7 +154,7 @@ Haskell:
 
 > prefixSums l = scanl (+) 0 l
 
-## Prefix sums on trees
+# Prefix sums on trees
 
 > prefixSums t = scanl (+) 0 t
 >
@@ -173,7 +167,7 @@ Haskell:
 *   Still very sequential.
 *   Does associativity help as with `fold`?
 
-## Parallel prefix sums
+# Parallel prefix sums
 
 General version:
 
@@ -192,21 +186,6 @@ If balanced, dependency depth $O (\log n)$, work $O (n \log n)$.
 
 Can reduce work to $O (n)$.
 
-# Misc
+# 1977 Turing Award -- John Backus
 
-## 1977 Turing Award -- John Backus
-
-\ \ \ \ \ ![1977 Turing Award](../BackusTuringPaperHighlight.png)
-
-## Static typing
-
-*   Automate consistency checking.
-*   Catch bugs much earlier.
-*   Ideal: if the code type-checks, it's correct.
-    Often achieved.
-*   Ideal: eliminate all incorrect programs, but keep all correct ones.
-*   Helps evolution.
-    Guide the transition through inconsistent intermediate code states.
-*   We'll need rich/sophisticated/fancy types.
-    The functional discipline helps as well.
-    Harder with sequential.
+\ \ \ \ \ ![1977 Turing Award](BackusTuringPaperHighlight.png)
