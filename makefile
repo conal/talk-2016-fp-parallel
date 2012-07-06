@@ -1,30 +1,41 @@
-TARG = what-is-functional-programming
+TARG = output/fp
+
+# TARG = output/what-is-functional-programming
 
 # .PRECIOUS: %.tex
 
 default: $(TARG).pdf
 
-theme = Warsaw
-# theme = default
-theme = Madrid
+bh = beamer-header.tex
 
-beamerOpts = -V theme:$(theme)
-beamerOpts += --incremental
+# beamerOpts  = -V theme:$(theme) -V colortheme:$(colortheme) -V outertheme:$(outertheme)
+beamerOpts += --include-in-header=$(bh)
+
+# beamerOpts += -V theme:Madrid
+# beamerOpts += -V theme:Warsaw
+beamerOpts += -V theme:Frankfurt
+# beamerOpts += -V theme:Berkeley
+# beamerOpts += -V colortheme:albatross
+
+# beamerOpts += --incremental
+# beamerOpts += -V toc:true
+
+# beamerOpts += --highlight-style=kate
 
 # Hack to stop pandoc from changing list item indents
 tweak = sed -e 's/\\renewcommand{\\@listi}/\\newcommand{\\voot}/'
 
-%.tex: %.md makefile
-	pandoc $*.md -t beamer --standalone $(beamerOpts) | $(tweak) > $*.tex
+output/%.tex: %.md makefile $(bh)
+	pandoc $*.md -f Markdown+LHS -t beamer $(beamerOpts) | $(tweak) > output/$*.tex
 
-%.pdf: %.tex makefile
-	pdflatex $*.tex
+output/%.pdf: output/%.tex makefile
+	cd output ; pdflatex $*.tex
 
-%-s5.html: %.md makefile
-	pandoc -t s5 -s $*.md -o $*-s5.html --standalone
+# %-s5.html: %.md makefile
+# 	pandoc -t s5 -s $*.md -o $*-s5.html --standalone
 
-%-slidy.html: %.md makefile
-	pandoc -t slidy -s $*.md -o $*-slidy.html --standalone --incremental
+# %-slidy.html: %.md makefile
+# 	pandoc -t slidy -s $*.md -o $*-slidy.html --standalone --incremental
 
 # showpdf=open
 # showpdf=evince
@@ -37,4 +48,5 @@ see: $(TARG).see
 	${showpdf} $*.pdf
 
 
-.PRECIOUS: foo.pdf
+.PRECIOUS: output/fp.pdf output/fp.tex
+
