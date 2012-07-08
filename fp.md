@@ -63,7 +63,7 @@
 
 # Idea: remove *all* state
 
-*   And, with it, remove
+*   And, with it,
     *   mutation,
     *   sequencing,
     *   statements.
@@ -76,39 +76,70 @@
 
 # Sequential sum
 
-C:
+**C:**
 
 ~~~{.C}
-int sumArr(int arr[], int n) {
-    int sum = 0;
+int sum(int arr[], int n) {
+    int acc = 0;
     for (int i=0; i<n; i++)
-      sum += arr[i];
-    return sum;
+      acc += arr[i];
+    return acc;
 }
 ~~~
 
-Haskell:
+**Haskell:**
 
-> sum l = foldl (+) 0 l
+> sum = sumAcc 0
+>  where
+>    sumAcc acc []     = acc
+>    sumAcc acc (a:as) = sumAcc (acc + a) as
+
+# Refactoring
+
+> sum = foldl (+) 0
 
 where
 
-> foldl (+) 0 [a,b,...,z] == (...((0 + a) + b) ...) + z
+> foldl (#) acc []     = acc
+> foldl (#) acc (a:as) = foldl (#) (acc # a) as
 
 # Parallel sum -- how?
 
-Left-associated sum: $$(\ldots ((0 + a) + b) \ldots) + z$$
+Left-associated sum:
+
+> sum [a,b,...,z] == (...((0 + a) + b) ...) + z
 
 How to parallelize?
 
+Divide and conquer.
+
+# Balanced data
+
+> data Tree a = L a | B (Tree a) (Tree a)
+
+Sequential:
+
+> sum = sumAcc 0
+>   where
+>    sumAcc acc (L a)   = acc + a
+>    sumAcc acc (B s t) = sumAcc (sumAcc acc s) t
+
+Again, `sum = foldl (+) 0`.
+
 \pause
 
-*   Divide and conquer
-    *   Sum each part independently
-    *   Then sum results
+Parallel:
+
+> sum (L a)   = a
+> sum (B s t) = sum s + sum t
+
+Equivalent? Why?
+
+# Balance
+
 *   Generalize beyond +,0.
 \pause
-*   *When valid?*
+*   When valid?
 
 # Associative folds
 
@@ -122,21 +153,10 @@ Not just lists:
 
 Balanced data structures lead to balanced parallelism.
 
-# Balance
-
-Contrast:
-
-> data List a = Nil | Cons a (List a)
-
-with
-
-> data Tree a = L a | B (Tree a) (Tree a)
-
-Can enforce tree balance with fancier types.
 
 # Trickier algorithm: prefix sums
 
-C:
+**C:**
 
 ~~~{.C}
 int prefixSums(int arr[], int n){
@@ -150,15 +170,15 @@ int prefixSums(int arr[], int n){
 }
 ~~~
 
-Haskell:
+**Haskell:**
 
-> prefixSums l = scanl (+) 0 l
+> prefixSums = scanl (+) 0
 
 # Prefix sums on trees
 
-> prefixSums t = scanl (+) 0 t
+> prefixSums = scanl (+) 0
 >
-> scanl op acc (L a)   = (mempty, acc `op` a)
+> scanl op acc (L a)   = (L acc, acc `op` a)
 > scanl op acc (B u v) = (B u' v', uvTot)
 >  where
 >    (u', uTot) = scanl op acc  u
@@ -175,16 +195,54 @@ General version:
 
 On trees,
 
-> scan (L a)   = (mempty, a)
-> scan (B u v) = (B u' v'', uTot `mappend` vTot)
+> scan (L a)   = (L mempty, a)
+> scan (B u v) = (B u' (adjust <$> v'), adjust vTot)
 >  where
 >    (u',uTot) = scan u
 >    (v',vTot) = scan v
->    v'' = map (uTot `mappend`) v'
+>    adjust = (uTot `mappend`)
 
 If balanced, dependency depth $O (\log n)$, work $O (n \log n)$.
 
 Can reduce work to $O (n)$.
+
+# CUDA parallel prefix sum
+
+    __global__ void scan(float *g_odata, float *g_idata, int n) {
+        extern __shared__ float temp[];
+        int thid = threadIdx.x;
+        int offset = 1;
+        temp[2*thid] = g_idata[2*thid];
+        temp[2*thid+1] = g_idata[2*thid+1];
+        for (int d = n>>1; d > 0; d >>= 1) { 
+            __syncthreads();
+            if (thid < d) {
+                int ai = offset*(2*thid+1)-1;
+                int bi = offset*(2*thid+2)-1;
+                temp[bi] += temp[ai];
+            }
+            offset *= 2;
+        }
+        ...
+
+# CUDA parallel prefix sum (cont)
+
+        if (thid == 0) { temp[n - 1] = 0; }
+        for (int d = 1; d < n; d *= 2) {
+            offset >>= 1;
+            __syncthreads();
+            if (thid < d) {
+                int ai = offset*(2*thid+1)-1;
+                int bi = offset*(2*thid+2)-1;
+                float t = temp[ai];
+                temp[ai] = temp[bi];
+                temp[bi] += t; 
+            }
+        }
+        __syncthreads();
+        g_odata[2*thid] = temp[2*thid];
+        g_odata[2*thid+1] = temp[2*thid+1];
+    }
 
 # 1977 Turing Award -- John Backus
 

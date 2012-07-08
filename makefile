@@ -1,9 +1,5 @@
 TARG = output/fp
 
-# TARG = output/what-is-functional-programming
-
-# .PRECIOUS: %.tex
-
 default: $(TARG).pdf
 
 bh = beamer-header.tex
@@ -23,30 +19,40 @@ beamerOpts += -V theme:Frankfurt
 # beamerOpts += --highlight-style=kate
 
 # Hack to stop pandoc from changing list item indents
-tweak = sed -e 's/\\renewcommand{\\@listi}/\\newcommand{\\voot}/'
+untweakIndents = sed -e 's/\\renewcommand{\\@listi}/\\newcommand{\\voot}/'
 
 output/%.tex: %.md makefile $(bh)
-	pandoc $*.md -f Markdown+LHS -t beamer $(beamerOpts) | $(tweak) > output/$*.tex
+	pandoc $< -f Markdown+LHS -t beamer $(beamerOpts) | $(untweakIndents) > $@
 
-output/%.pdf: output/%.tex makefile
-	cd output ; pdflatex $*.tex
+%.pdf: %.tex makefile backus-fortran.jpg BackusTuringPaperHighlight.png
+	pdflatex -output-directory output $<
 
 # %-s5.html: %.md makefile
-# 	pandoc -t s5 -s $*.md -o $*-s5.html --standalone
+# 	pandoc -t s5 -s $< -o $@ --standalone
 
 # %-slidy.html: %.md makefile
-# 	pandoc -t slidy -s $*.md -o $*-slidy.html --standalone --incremental
+# 	pandoc -t slidy -s $< -o $@ --standalone --incremental
 
 # showpdf=open
 # showpdf=evince
 # showpdf=explorer
 showpdf = open -a Skim.app
 
+see-handout: output/fp-handout.see
+
+handout: output/fp-handout.pdf
+
+output/%-handout.tex: output/%.tex
+	sed -e 's/ignorenonframetext/ignorenonframetext,handout/' < $< > $@
+# \documentclass[ignorenonframetext,]{beamer}
+
+
 see: $(TARG).see
 
 %.see: %.pdf
-	${showpdf} $*.pdf
+	${showpdf} $<
 
+clean:
+	rm output/*
 
-.PRECIOUS: output/fp.pdf output/fp.tex
-
+.PRECIOUS: output/%.tex output/%.pdf output/fp-handout.pdf
