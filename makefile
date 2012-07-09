@@ -21,7 +21,10 @@ beamerOpts += -V theme:Frankfurt
 # Hack to stop pandoc from changing list item indents
 untweakIndents = sed -e 's/\\renewcommand{\\@listi}/\\newcommand{\\voot}/'
 
-output/%.tex: %.md makefile $(bh)
+output:
+	mkdir output
+
+output/%.tex: %.md makefile $(bh) output
 	pandoc $< -f Markdown+LHS -t beamer $(beamerOpts) | $(untweakIndents) > $@
 
 %.pdf: %.tex makefile backus-fortran.jpg BackusTuringPaperHighlight.png
