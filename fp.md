@@ -42,6 +42,11 @@
 *   *Over-linearizes* algorithms.
 *   Hard to isolate accidental sequentiality.
 
+# Can we fix sequential languages?
+
+*   Throw in parallel composition
+*   Nondeterminism!
+
 # Applications perform zillions of simple computations.
 
 *   Compute all at once?
@@ -69,6 +74,9 @@
     *   statements.
 *   Expression dependencies are specific & explicit.
 *   Remainder can be parallel.
+
+# Stateless programming
+
 *   Programming is calculation/math:
     *   Precise & tractable reasoning (algebra),
     *   ... including optimization/transformation.
@@ -153,6 +161,23 @@ Not just lists:
 
 Balanced data structures lead to balanced parallelism.
 
+# Two folds
+
+On trees:
+
+> fold :: Monoid a => Tree a -> a
+> fold (L a)   = a
+> fold (B s t) = fold s `mappend` fold t
+
+\pause
+
+\ 
+
+On lists:
+
+> fold :: Monoid a => [a] -> a
+> fold []     = mempty
+> fold (a:as) = a `mappend` fold as
 
 # Trickier algorithm: prefix sums
 
