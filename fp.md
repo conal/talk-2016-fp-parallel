@@ -45,7 +45,12 @@
 # Can we fix sequential languages?
 
 *   Throw in parallel composition
-*   Nondeterminism!
+*   Nondeterminism
+
+\ \pause
+
+\ \ \ \ \ ![Yuk!](yuk.png)
+
 
 # Applications perform zillions of simple computations.
 
@@ -75,6 +80,10 @@
 *   Expression dependencies are specific & explicit.
 *   Remainder can be parallel.
 
+\ \pause
+
+*   Contrast: "$A\, ; B$" vs "$A + B$" vs "$(A + B) \times C$".
+
 # Stateless programming
 
 *   Programming is calculation/math:
@@ -94,6 +103,8 @@ int sum(int arr[], int n) {
     return acc;
 }
 ~~~
+
+\pause
 
 **Haskell:**
 
@@ -119,7 +130,7 @@ Left-associated sum:
 
 How to parallelize?
 
-Divide and conquer.
+Divide and conquer?
 
 # Balanced data
 
@@ -179,12 +190,16 @@ On lists:
 > fold []     = mempty
 > fold (a:as) = a `mappend` fold as
 
+\ 
+
+Automatic from types.
+
 # Trickier algorithm: prefix sums
 
 **C:**
 
 ~~~{.C}
-int prefixSums(int arr[], int n){
+int prefixSums(int arr[], int n) {
     int sum = 0;
     for (int i=0; i<n; i++) {
         int next = arr[i];
@@ -203,22 +218,18 @@ int prefixSums(int arr[], int n){
 
 > prefixSums = scanl (+) 0
 >
-> scanl op acc (L a)   = (L acc, acc `op` a)
-> scanl op acc (B u v) = (B u' v', uvTot)
+> scanl (#) acc (L a)   = (L acc, acc # a)
+> scanl (#) acc (B u v) = (B u' v', uvTot)
 >  where
->    (u', uTot) = scanl op acc  u
->    (v',uvTot) = scanl op uTot v
+>    (u', uTot) = scanl (#) acc  u
+>    (v',uvTot) = scanl (#) uTot v
 
 *   Still very sequential.
 *   Does associativity help as with `fold`?
 
 # Parallel prefix sums
 
-General version:
-
-> scan :: (Traversable f, Monoid a) => f a -> (f a, a)
-
-On trees,
+On trees:
 
 > scan (L a)   = (L mempty, a)
 > scan (B u v) = (B u' (adjust <$> v'), adjust vTot)
@@ -227,9 +238,13 @@ On trees,
 >    (v',vTot) = scan v
 >    adjust = (uTot `mappend`)
 
-If balanced, dependency depth $O (\log n)$, work $O (n \log n)$.
+*   If balanced, dependency depth $O (\log n)$, work $O (n \log n)$.
+*   Can reduce work to $O (n)$.
 
-Can reduce work to $O (n)$.
+\pause
+
+*   Generalizes from trees.
+*   Automatic from type.
 
 # CUDA parallel prefix sum
 
