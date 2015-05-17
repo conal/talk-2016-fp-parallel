@@ -4,13 +4,13 @@
 
 # Why functional programming?
 
-*   \wow{Parallelism}
-    \note{Parallel-friendly}
 *   Correctness
     \note{Practical \& precise reasoning.}
 *   Productivity
     \note{Captures high-level programming patterns formally for reuse.
     Code is a liability.}
+*   \wow{Parallelism}
+    \note{Parallel-friendly}
 
 # What is functional programming?
 
@@ -23,9 +23,11 @@
 
 *   Machine/assembly: statements only
     \note{Built up by sequencing.}
+    \pause
 *   Fortran etc: statements + expressions
     \note{Expressions on RHSs. Nestable!
     Mainstream (imperative) languages are all Fortran variations.}
+    \pause
 *   Functional: expressions only
     \note{With expressions like these, who needs statements?}
 
@@ -119,8 +121,8 @@ int sum(int arr[], int n) {
 
 where
 
-> foldl (#) acc []     = acc
-> foldl (#) acc (a:as) = foldl (#) (acc # a) as
+> foldl op acc []     = acc
+> foldl op acc (a:as) = foldl op (op acc a) as
 
 # Parallel sum -- how?
 
@@ -218,11 +220,11 @@ int prefixSums(int arr[], int n) {
 
 > prefixSums = scanl (+) 0
 >
-> scanl (#) acc (L a)   = (L acc, acc # a)
-> scanl (#) acc (B u v) = (B u' v', uvTot)
+> scanl op acc (L a)   = (L acc, op acc a)
+> scanl op acc (B u v) = (B u' v', uvTot)
 >  where
->    (u', uTot) = scanl (#) acc  u
->    (v',uvTot) = scanl (#) uTot v
+>    (u', uTot) = scanl op acc  u
+>    (v',uvTot) = scanl op uTot v
 
 *   Still very sequential.
 *   Does associativity help as with `fold`?
