@@ -122,7 +122,7 @@ int sum(int arr[], int n) {
 where
 
 > foldl op acc []     = acc
-> foldl op acc (a:as) = foldl op (op acc a) as
+> foldl op acc (a:as) = foldl op (acc `op` a) as
 
 # Parallel sum -- how?
 
@@ -220,7 +220,7 @@ int prefixSums(int arr[], int n) {
 
 > prefixSums = scanl (+) 0
 >
-> scanl op acc (L a)   = (L acc, op acc a)
+> scanl op acc (L a)   = (L acc, acc `op` a)
 > scanl op acc (B u v) = (B u' v', uvTot)
 >  where
 >    (u', uTot) = scanl op acc  u
