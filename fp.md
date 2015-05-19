@@ -16,6 +16,7 @@
 
 *   Value-oriented
     \note{as opposed to action-oriented}
+
 *   Like arithmetic on big values
     \note{strings, sequences, streams, trees, images, geometry, functions.}
 
@@ -37,10 +38,13 @@
 
 # What makes a language *bad* for parallelism?
 
+\pause
+
 *   Sequential bias
     *   Primitive: assignment (state change)
     *   Composition: *sequential* execution
     *   "Von Neumann" languages (Fortran, C, Java, Python, ...)
+        \pause
 *   *Over-linearizes* algorithms.
 *   Hard to isolate accidental sequentiality.
 
@@ -53,6 +57,15 @@
 
 \ \ \ \ \ ![Yuk!](yuk.png)
 
+# Can we *un-break* sequential languages?
+
+\pause
+
+ > *Perfection is achieved not when there is nothing left to add, but when there is nothing left to take away.*
+
+\begin{flushright}
+Antoine de Saint-Exupéry
+\end{flushright}
 
 # Applications perform zillions of simple computations.
 
