@@ -58,4 +58,15 @@ see: $(TARG).see
 clean:
 	rm output/*
 
+
+STASH=conal@conal.net:/home/conal/web/talks
+web: web-token
+
+web-token: $(TARG).pdf
+	scp $? $(STASH)/functional-programming-2012.pdf
+	touch $@
+
+#  $(TARG).lhs HScan.lhs
+
+
 .PRECIOUS: output/%.tex output/%.pdf output/fp-handout.pdf
