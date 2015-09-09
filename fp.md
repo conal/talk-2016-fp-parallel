@@ -59,6 +59,7 @@
 
 # Can we *un-break* sequential languages?
 
+\vspace{6ex}
 \pause
 
  > *Perfection is achieved not when there is nothing left to add, but when there is nothing left to take away.*
