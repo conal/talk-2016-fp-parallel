@@ -138,6 +138,15 @@ where
 > foldl op acc []     = acc
 > foldl op acc (a:as) = foldl op (acc `op` a) as
 
+# Right alternative
+
+> sum = foldr (+) 0
+
+where
+
+> foldr op e []     = e
+> foldr op e (a:as) = a `op` foldr op e as
+
 # Parallel sum -- how?
 
 Left-associated sum:
@@ -299,6 +308,16 @@ On trees:
         g_odata[2*thid] = temp[2*thid];
         g_odata[2*thid+1] = temp[2*thid+1];
     }
+
+# Manual vs automatic placement
+
+*   Programmers used to explicitly place computations in space.
+    \pause
+*   Mainstream programming *still* manually places in time.
+    \pause
+*   Sequential composition: crude placement tool.
+*   Threads: notationally clumsy & hard to manage correctly.
+*   If we relinquish control, automation can do better.
 
 # 1977 Turing Award -- John Backus
 
