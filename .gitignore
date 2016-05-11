@@ -3,6 +3,17 @@ Junk*
 Old*
 output
 
+*.aux
+*.log
+*.nav
+*.out
+*.pdf
+*.ptb
+*.snm
+*.toc
+
+fp-parallel.tex
+
 # Mac OS generates
 .DS_Store
 
@@ -10,3 +21,7 @@ output
 # For instance, .#Help.page
 .#*
 web-token
+
+figures before crop/
+was-figures/
+was-makefile

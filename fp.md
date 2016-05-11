@@ -1,6 +1,6 @@
-% Functional programming
+% Functional programming and parallelism
 % Conal Elliott
-% July 10, 2012
+% July 10, 2012 (updated May, 2016)
 
 # Why functional programming?
 
@@ -51,7 +51,10 @@
 # Can we fix sequential languages?
 
 *   Throw in parallel composition
-*   Nondeterminism
+    \pause
+*   Oops:
+    *   Nondeterminism
+    *   Deadlock
 
 \ \pause
 
@@ -153,6 +156,8 @@ Left-associated sum:
 
 > sum [a,b,...,z] == (...((0 + a) + b) ...) + z
 
+\vspace{5ex}
+
 How to parallelize?
 
 Divide and conquer?
@@ -181,7 +186,7 @@ Equivalent? Why?
 
 # Balance
 
-*   Generalize beyond +,0.
+*   Generalize beyond +, 0.
 \pause
 *   When valid?
 
@@ -195,6 +200,8 @@ Not just lists:
 
 > fold :: (Foldable f, Monoid a) => f a -> a
 
+\vspace{5ex} 
+
 Balanced data structures lead to balanced parallelism.
 
 # Two folds
@@ -203,7 +210,7 @@ On trees:
 
 > fold :: Monoid a => Tree a -> a
 > fold (L a)   = a
-> fold (B s t) = fold s `mappend` fold t
+> fold (B s t) = fold s <> fold t
 
 \pause
 
@@ -213,7 +220,7 @@ On lists:
 
 > fold :: Monoid a => [a] -> a
 > fold []     = mempty
-> fold (a:as) = a `mappend` fold as
+> fold (a:as) = a <> fold as
 
 \ 
 
@@ -261,10 +268,12 @@ On trees:
 >  where
 >    (u',uTot) = scan u
 >    (v',vTot) = scan v
->    adjust = (uTot `mappend`)
+>    adjust x  = uTot <> x
 
 *   If balanced, dependency depth $O (\log n)$, work $O (n \log n)$.
 *   Can reduce work to $O (n)$.
+
+    See [*Understanding efficient parallel scan*](https://github.com/conal/talk-2013-understanding-parallel-scan).
 
 \pause
 
