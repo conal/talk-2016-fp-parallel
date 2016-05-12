@@ -2,7 +2,7 @@
 
 %% %let atwork = True
 
-% Presentation
+%% % Presentation
 %% \documentclass{beamer}
 
 % Printed
@@ -68,9 +68,10 @@
 \title{FP and parallelism}
 \date{May 2016}
 
+%if False
 \framet{Why functional programming?}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
   Correctness \note{Practical \& precise reasoning.}
 \item
@@ -83,7 +84,7 @@
 
 \framet{What is functional programming?}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
   Value-oriented \note{as opposed to action-oriented}
 \item
@@ -93,16 +94,18 @@
 
 \framet{Finishes a shift that Fortran began}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
-  Machine/assembly: statements only \note{Built up by sequencing.} \pause
-\item
+  Machine/assembly: statements only \note{Built up by sequencing.}
+\pitem
   Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
-  Mainstream (imperative) languages are all Fortran variations.} \pause
-\item
+  Mainstream (imperative) languages are all Fortran variations.}
+\pitem
   Functional: expressions only \note{With expressions like these, who needs statements?}
 \end{itemize}
 }
+
+%endif
 
 \framet{What makes a language good for parallelism?}{
 
@@ -110,21 +113,18 @@
 }
 
 \framet{What makes a language \emph{bad} for parallelism?}{
-
-\pause
-
-\begin{itemize}\setlength{\itemsep}{3ex}
-\item
-  Sequential bias.\vspace{2ex}
-  \begin{itemize}\setlength{\itemsep}{2ex}
+\begin{itemize}\itemsep 3ex
+\pitem
+  Sequential bias\vspace{2ex}
+  \begin{itemize}\itemsep 2ex
     \item
     Primitive: assignment (state change)
   \item
     Composition: \emph{sequential} execution
   \item
-    ``Von Neumann'' languages (Fortran, C, Java, Python, \ldots{}) \pause
+    ``Von Neumann'' languages (Fortran, C, Java, Python, \ldots{})
   \end{itemize}\vspace{-1ex}
-\item
+\pitem
   \emph{Over-linearizes} algorithms.
 \item
   Hard to isolate accidental sequentiality.
@@ -133,22 +133,24 @@
 
 \framet{Can we fix sequential languages?}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
-  Throw in parallel composition \pause
-\item
-  Oops:\vspace{1.5ex}
-  \begin{itemize}\setlength{\itemsep}{2ex}
-    \item
-    Nondeterminism
-  \item
-    Deadlock
+  Throw in parallel composition
+\pitem
+  Oops:\vspace{0.5ex}
+
+\begin{minipage}[c]{0.5\textwidth}
+  \begin{itemize}\itemsep 2ex
+    \item Nondeterminism
+    \item Deadlock
+    \item Intractable reasoning
   \end{itemize}
+\end{minipage}
+\pause
+\begin{minipage}[c]{0.3\textwidth}
+\includegraphics{yuk.png}
+\end{minipage}
 \end{itemize}
-
-~\pause
-
-~~~~~\includegraphics{yuk.png}
 }
 
 \framet{Can we \emph{un-break} sequential languages?}{
@@ -168,11 +170,11 @@ Antoine de Saint-Exup\'ery
 
 \framet{Applications perform zillions of simple computations.}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
   Compute all at once?
 \item
-  Oops -- data dependencies.
+  Oops -- dependencies.
 \item
   Minimize dependencies!
 \end{itemize}
@@ -180,10 +182,10 @@ Antoine de Saint-Exup\'ery
 
 \framet{Dependencies}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
   Three sources:\vspace{2ex}
-  \begin{enumerate}\setlength{\itemsep}{2.5ex}
+  \begin{enumerate}\itemsep 2.5ex
   \def\labelenumi{\arabic{enumi}.}
     \item
     Problem
@@ -199,7 +201,7 @@ Antoine de Saint-Exup\'ery
 
 \framet{Dependency in imperative languages}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 5ex
 \item
   Built into sequencing: \(A\, ; B\)
 \item
@@ -209,10 +211,10 @@ Antoine de Saint-Exup\'ery
 
 \framet{Idea: remove \emph{all} state}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
   And, with it,\vspace{1.5ex}
-  \begin{itemize}\setlength{\itemsep}{1.5ex}
+  \begin{itemize}\itemsep 1.5ex
     \item
     mutation,
   \item
@@ -226,20 +228,20 @@ Antoine de Saint-Exup\'ery
   Remainder can be parallel.
 \end{itemize}
 
-~\pause
+~
 
-\begin{itemize}\setlength{\itemsep}{3ex}
-\item
+\begin{itemize}\itemsep 3ex
+\pitem
   Contrast: ``\(A\, ; B\)'' vs ``\(A + B\)'' vs ``\((A + B) \times C\)''.
 \end{itemize}
 }
 
 \framet{Stateless programming}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 5ex
 \item
   Programming is calculation/math:\vspace{1.5ex}
-  \begin{itemize}\setlength{\itemsep}{2ex}
+  \begin{itemize}\itemsep 2ex
     \item
     Precise \& tractable reasoning (algebra),
   \item
@@ -247,26 +249,29 @@ Antoine de Saint-Exup\'ery
   \end{itemize}
 \item
   No loss of expressiveness!
+\item
+  ``Functional programming'' (value-oriented) \note{as opposed to action-oriented}
+\item
+  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
 \end{itemize}
 }
 
 \framet{Sequential sum}{
 
 \textbf{C:}
-
+\vspace{-2ex}
 \begin{verbatim}
-int sum(int arr[], int n) {
-    int acc = 0;
-    for (int i=0; i<n; i++)
-      acc += arr[i];
-    return acc;
-}
+   int sum(int arr[], int n) {
+       int acc = 0;
+       for (int i=0; i<n; i++)
+         acc += arr[i];
+       return acc;
+   }
 \end{verbatim}
 
-\pause
+\vspace{1ex}\pause
 
 \textbf{Haskell:}
-
 \begin{code}
 sum = sumAcc 0
   where
@@ -362,10 +367,10 @@ Equivalent? Why?
 
 \framet{Balanced computation}{
 
-\begin{itemize}\setlength{\itemsep}{5ex}
+\begin{itemize}\itemsep 5ex
 \item
-  Generalize beyond +, 0. \pause
-\item
+  Generalize beyond +, 0.
+\pitem
   When valid?
 \end{itemize}
 }
@@ -391,7 +396,7 @@ fold :: (Foldable f, Monoid a) => f a -> a
 Balanced data structures lead to balanced parallelism.
 }
 
-\framet{Two folds}{
+\framet{Two associative folds}{
 
 \pause
 
@@ -421,28 +426,27 @@ Derivable automatically from types.
 \framet{Trickier algorithm: prefix sums}{
 
 \textbf{C:}
-
+\vspace{-2ex}
 \begin{verbatim}
-int prefixSums(int arr[], int n) {
-    int sum = 0;
-    for (int i=0; i<n; i++) {
-        int next = arr[i];
-        arr[i] = sum;
-        sum += next;
-    }
-    return sum;
-}
+   int prefixSums(int arr[], int n) {
+       int sum = 0;
+       for (int i=0; i<n; i++) {
+           int next = arr[i];
+           arr[i] = sum;
+           sum += next;
+       }
+       return sum;
+   }
 \end{verbatim}
 
 \textbf{Haskell:}
-
 \begin{code}
 prefixSums = scanl (+) 0
 \end{code}
 }
 
 \framet{Sequence prefix sum}{
-\vspace{2ex}
+\vspace{4ex}
 \wfig{4.7in}{figures/lsumsT-lvec6-no-opt}
 }
 
@@ -459,12 +463,12 @@ scanl op acc (B u v)  = (B u' v', uvTot)
 }
 
 \framet{Sequential prefix sums on trees --- depth 2}{
-\vspace{2ex}
+\vspace{4ex}
 \wfig{4.7in}{figures/lsumsT-rt2-no-opt}
 }
 
 \framet{Sequential prefix sums on trees --- depth 3}{
-\vspace{2ex}
+\vspace{4ex}
 \wfig{4.7in}{figures/lsumsT-rt3-no-opt}
 }
 
@@ -487,10 +491,8 @@ scanl op acc (B u v)  = (B u' v', vTot)
     (v',vTot)  = scanl op uTot v
  \end{code}
 
-\pause
-
-\begin{itemize}\setlength{\itemsep}{3ex}
-\item
+\begin{itemize}\itemsep 3ex
+\pitem
   Still very sequential.
 \item
   Does associativity help as with |fold|?
@@ -503,14 +505,14 @@ On trees:
 
 \begin{code}
 scan (L a)    = (L mempty, a)
-scan (B u v)  = (B u' (adjust <$> v'), adjust vTot)
+scan (B u v)  = (B u' (fmap adjust v'), adjust vTot)
   where
     (u',uTot)  = scan u
     (v',vTot)  = scan v
     adjust x   = uTot `mappend` x
 \end{code}
 
-\begin{itemize}\setlength{\itemsep}{2ex}
+\begin{itemize}\itemsep 2ex
 \item
   If balanced, dependency depth \(O (\log n)\), work \(O (n \log n)\).
 \item
@@ -519,7 +521,7 @@ scan (B u v)  = (B u' (adjust <$> v'), adjust vTot)
 \pitem
   Generalizes from trees.
 \item
-  Automatic from type.
+  \emph{Automatic from type.}
 \end{itemize}
 }
 
@@ -551,57 +553,6 @@ scan (B u v)  = (B u' (adjust <$> v'), adjust vTot)
 
 %if False
 
-\framet{In CUDA C -- bottom-up binary}{
-\begin{minipage}[c]{0.7\textwidth}
-\tiny
-\begin{verbatim}
-__global__ void prescan(float *g_odata, float *g_idata, int n) {
-    extern __shared__ float temp[];  // allocated on invocation
-    int thid = threadIdx.x;
-    int offset = 1;
-    // load input into shared memory
-    temp[2*thid] = g_idata[2*thid];
-    temp[2*thid+1] = g_idata[2*thid+1];
-    // build sum in place up the tree
-    for (int d = n>>1; d > 0; d >>= 1) {
-        __syncthreads();
-        if (thid < d) {
-            int ai = offset*(2*thid+1)-1;
-            int bi = offset*(2*thid+2)-1;
-            temp[bi] += temp[ai]; }
-        offset *= 2; }
-    // clear the last element
-    if (thid == 0) { temp[n - 1] = 0; }
-    // traverse down tree & build scan
-    for (int d = 1; d < n; d *= 2) {
-        offset >>= 1;
-        __syncthreads();
-        if (thid < d) {
-            int ai = offset*(2*thid+1)-1;
-            int bi = offset*(2*thid+2)-1;
-            float t = temp[ai];
-            temp[ai] = temp[bi];
-            temp[bi] += t; } }
-    __syncthreads();
-    // write results to device memory
-    g_odata[2*thid] = temp[2*thid];
-    g_odata[2*thid+1] = temp[2*thid+1]; }
-\end{verbatim}
-\vspace{-6ex}
-\href{http://http.developer.nvidia.com/GPUGems3/gpugems3_ch39.html}{Source: Harris, Sengupta, and Owens in \emph{GPU Gems 3}, Chapter 39}
-\normalsize
-\end{minipage}
-\hspace{-1in}
-\begin{minipage}[c]{0.25\textwidth}
-%% \pause
-%% \begin{figure}
-%% \wpicture{2in}{figures/picard-facepalm}
-%% \end{figure}
-\end{minipage}
-}
-
-%else
-
 \framet{CUDA parallel prefix sum}{
 
 \begin{verbatim}
@@ -623,8 +574,6 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
     ...
 \end{verbatim}
 }
-
-%endif
 
 \framet{CUDA parallel prefix sum (cont)}{
 
@@ -648,14 +597,16 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 \end{verbatim}
 }
 
+%endif
+
 \framet{Manual vs automatic placement}{
 
-\begin{itemize}\setlength{\itemsep}{3ex}
+\begin{itemize}\itemsep 3ex
 \item
-  Programmers used to explicitly place computations in space. \pause
-\item
-  Mainstream programming \emph{still} manually places in time. \pause
-\item
+  Programmers used to explicitly place computations in space.
+\pitem
+  Mainstream programming \emph{still} manually places in time.
+\pitem
   Sequential composition: crude placement tool.
 \item
   Threads: notationally clumsy \& hard to manage correctly.
@@ -664,8 +615,10 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 \end{itemize}
 }
 
-\section{1977 Turing Award -- John Backus}
-
+%if False
+\framet{1977 Turing Award -- John Backus}{
 ~~~~~\includegraphics{BackusTuringPaperHighlight.png}
+}
+%endif
 
 \end{document}
