@@ -1,24 +1,33 @@
 %% Misc lhs2TeX directives
 
-%format Unit = " \mathbf{1} "
-%% %format Unit = " \mathbbm{1} "
-%format :* = " \times "
-%format :+ = " + "
+%% %format Unit = " \mathbf{1} "
+%% %% %format Unit = " \mathbbm{1} "
+%% %format :* = " \times "
+
+%format U1    = Empty
+%format Par1  = Id
+%format Comp1 = O
 
 %format :*: = " \times "
 %format :+: = " + "
+%format :.: = "\circ"
 
 %format `mappend` = " \mathbin{\oplus} "
 %format mempty = " \emptyset "
 
 %format <$> = "\mathbin{<\!\!\!\$\!\!\!>}"
 
-% %format :. = "\, {\mathbin{:\!\!\circ}}\, "
-%format :. = "\circ"
+%format :+ = "\mathbin{:\!\!+}"
+%format :# = "\mathbin{:\!\!\#}"
+
+%% Dot product
+%format <.> = "\cdot"
+
+%format family = "\mathbf{family}"
+%format pattern = "\mathbf{pattern}"
 
 %% optional double-dollar spelling, to avoid $ confusing emacs latex-mode.
 %format <$$> = <$>
-
 
 % Got from Andres L:
 \newcommand{\calculationcomments}{%
@@ -30,8 +39,6 @@
 
 \newcommand{\mplus}{\mathbin{+}}
 % \newcommand{\mplus}{\mathbin{\hat{+}}}
-
-%format ~> = "\leadsto"
 
 %% hack: add missing space, e.g., before "{" in data type decl
 %format SPACE = "\ {}"

@@ -2,11 +2,11 @@
 
 %% %let atwork = True
 
-%% % Presentation
-%% \documentclass{beamer}
+% Presentation
+\documentclass{beamer}
 
-% Printed
-\documentclass[serif,handout]{beamer}
+%% % Printed
+%% \documentclass[handout]{beamer}
 
 %% % 2-up
 %% \usepackage{pgfpages}
@@ -17,9 +17,9 @@
 %% \usepackage{pgfpages}
 %% \pgfpagesuselayout{4 on 1}[border shrink=1mm]
 
-%% \usefonttheme{serif}
+\usefonttheme{serif}
 
-\usepackage{beamerthemesplit}
+% \usepackage{beamerthemesplit}
 
 %% % http://www.latex-community.org/forum/viewtopic.php?f=44&t=16603
 %% \makeatletter
@@ -47,7 +47,7 @@
 %include greek.fmt
 %include mine.fmt
 
-\title[FP and parallelism]{Functional programming and parallelism} % 
+\title{Functional programming and parallelism} % 
 \author{\href{http://conal.net}{Conal Elliott}}
 \date[May 2016]{July 2012 / May 2016}
 
@@ -103,7 +103,7 @@
 
 \begin{itemize}\itemsep 3ex
 \item
-  Throw in parallel composition
+  Throw in parallel composition.
 \pitem
   Oops:\vspace{0.5ex}
 
@@ -425,10 +425,10 @@ prefixSums = scanl (+) 0
 prefixSums = scanl (+) 0
 
 scanl op acc (L a)    = (L acc, acc `op` a)
-scanl op acc (B u v)  = (B u' v', uvTot)
+scanl op acc (B u v)  = (B u' v', vTot)
   where
-    (u', uTot)  = scanl op acc  u
-    (v',uvTot)  = scanl op uTot v
+    (u',uTot)  = scanl op acc   u
+    (v',vTot)  = scanl op uTot  v
 \end{code}
 }
 
@@ -457,8 +457,8 @@ prefixSums = scanl (+) 0
 scanl op acc (L a)    = (L acc, acc `op` a)
 scanl op acc (B u v)  = (B u' v', vTot)
   where
-    (u',uTot)  = scanl op acc  u
-    (v',vTot)  = scanl op uTot v
+    (u',uTot)  = scanl op acc   u
+    (v',vTot)  = scanl op uTot  v
  \end{code}
 
 \begin{itemize}\itemsep 3ex
@@ -495,17 +495,17 @@ scan (B u v)  = (B u' (fmap adjust v'), adjust vTot)
 \end{itemize}
 }
 
-\framet{Balanced parallel prefix sums --- depth 2, unoptimized}{
-\vspace{-7ex}
+\framet{Balanced parallel prefix sums --- depth 2}{
+\vspace{-5ex}
 \wfig{4.75in}{figures/lsumsp-rt2-no-hash-no-opt}
 }
-\framet{Balanced parallel prefix sums --- depth 3, unoptimized}{
-\vspace{-1.5ex}
-\wfig{4.5in}{figures/lsumsp-rt3-no-hash-no-opt}
+\framet{Balanced parallel prefix sums --- depth 3}{
+\vspace{-4ex}
+\wfig{4.75in}{figures/lsumsp-rt3-no-hash-no-opt}
 }
-\framet{Balanced parallel prefix sums --- depth 4, unoptimized}{
-\vspace{-2ex}
-\wfig{4.25in}{figures/lsumsp-rt4-no-hash-no-opt}
+\framet{Balanced parallel prefix sums --- depth 4}{
+\vspace{-4ex}
+\wfig{4.75in}{figures/lsumsp-rt4-no-hash-no-opt}
 }
 
 \framet{Balanced parallel prefix sums --- depth 2, optimized}{
@@ -569,41 +569,12 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 
 %endif
 
-\framet{Why functional programming?}{
+\framet{Manual vs automatic placement}{
 \pause
-\begin{itemize}\itemsep 3ex
-\item
-  \wow{Parallelism} \note{Parallel-friendly}
-\item
-  Correctness \note{Practical \& precise reasoning.}
-\item
-  Productivity \note{Captures high-level programming patterns formally for reuse.
-  Code is a liability.}
-\end{itemize}
+\emph{\href{http://whyy.org/cms/radiotimes/2011/02/14/the-eniac-anniversary/}{ENIAC, 1946}}:
+\vspace{1ex}
+\hspace{2ex} \wpicture{4.3in}{figures/eniac-programming}
 }
-
-%if False
-\framet{What is functional programming?}{
-\begin{itemize}\itemsep 3ex
-\item
-  Value-oriented \note{as opposed to action-oriented}
-\item
-  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
-\end{itemize}
-}
-
-\framet{Finishes a shift that Fortran began}{
-\begin{itemize}\itemsep 3ex
-\item
-  Machine/assembly: statements only \note{Built up by sequencing.}
-\pitem
-  Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
-  Mainstream (imperative) languages are all Fortran variations.}
-\pitem
-  Functional: expressions only \note{With expressions like these, who needs statements?}
-\end{itemize}
-}
-%endif
 
 \framet{Manual vs automatic placement}{
 
@@ -628,6 +599,7 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 %endif
 
 \framet{R\&D agenda: elegant, massively parallel FP}{
+\pause
 \begin{itemize}\itemsep 5ex
 \item
   Algorithm design:\vspace{1.5ex}
@@ -637,11 +609,11 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
   \item Easily composable
   \end{itemize}
 \item
-  Compiling functional programs for highly parallel execution:\vspace{1.5ex}
+  Compiling for highly parallel execution:\vspace{1.5ex}
   \begin{itemize}\itemsep 2ex
   \item Convert to algebraic vocabulary (CCC).
   \item Interpret vocabulary as ``circuits'' (FPGA, silicon, GPU).
-  \item Other interpretations, e.g., automatic differentiation
+  \item Other interpretations, e.g., automatic differentiation.
   \end{itemize}
 \end{itemize}
 }
@@ -650,13 +622,17 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 \pause
 \begin{minipage}[c]{0.63\textwidth}
 \begin{itemize}\itemsep 2ex
-\item Data structure tinker toys:\vspace{2ex}
+\item Data structure tinker toys:\vspace{1ex}
 \begin{code}
 data  Empty        a = Empty
+
 data  Id           a = Id a
+
 data  (f  :+:  g)  a = L (f a) | R (g a)
+
 data  (f  :*:  g)  a = Prod (f a) (g a)
-data  (g  :.:  f)  a = Comp (g (f a))
+
+data  (g  :.:  f)  a = Comp1 (g (f a))
 \end{code}
 \end{itemize}
 \begin{itemize}\itemsep 2ex
@@ -676,6 +652,7 @@ data  (g  :.:  f)  a = Comp (g (f a))
 \vspace{-4ex}
 $$\overbrace{\Id \times \cdots \times \Id}^{n\text{~times}}$$
 
+\pause
 Right-associated:
 \begin{code}
 type family RVec n where
@@ -695,11 +672,12 @@ type family LVec n where
 
 \nc\Pair{\Varid{Pair}}
 
-\framet{Binary trees}{
+\framet{Perfect binary leaf trees}{
 
 \vspace{-2ex}
 $$\overbrace{\Pair \circ \cdots \circ \Pair}^{n\text{~times}}$$
 
+\pause
 Right-associated:
 \begin{code}
 type family RBin n where
@@ -748,6 +726,228 @@ type family LPow h n where
   LPow h Z      = Par1
   LPow h (S n)  = LPow h n :.: h
 \end{code}
+
+Binary:
+\begin{code}
+type RBin n = RPow Pair n
+type LBin n = LPow Pair n
+\end{code}
 }
+
+\framet{Composing scans}{
+\vspace{-1ex}
+\begin{code}
+class LScan f where
+  lscan :: Monoid a => f a -> (f :*: Par1) a
+
+pattern And1 fa a = Prod fa (Par1 a)
+\end{code}
+
+\begin{code}
+instance LScan U1 where
+  lscan fa = And1 fa mempty
+
+instance LScan Par1 where
+  lscan (Par1 a) = And1 (Par1 mempty) a
+
+instance (LScan f, LFScan g)  => LScan (f :*: g) where
+  lscan (Prod fa ga)  = And1 (Prod fa' ga') gx
+   where
+     And1 fa'  fx  = lscan fa
+     And1 ga'  gx  = adjust fx (lscan ga)
+\end{code}
+}
+
+\framet{Composing scans}{
+\begin{code}
+instance (LScan g, LScan f, Zip g)  => LScan (g :.: f) where
+  lscan (Comp1 gfa) = And1 (Comp1 (zipWith adjust tots' gfa')) tot
+   where
+     (gfa', tots)    = unzipAnd1 (fmap lscan gfa)
+     And1 tots' tot  = lscan tots
+ 
+SPACE
+ 
+adjust :: (Monoid a, Functor t) => a -> t a -> t a
+adjust a t = fmap (a `mappend`) t
+\end{code}
+}
+
+\framet{Scan --- |RPow Pair N5|}{
+\vspace{-2ex}
+\wfig{4.7in}{figures/lsums-rt5}
+}
+\framet{Scan --- |LPow Pair N5|}{
+\vspace{-4ex}
+\wfig{4.75in}{figures/lsums-lt5}
+}
+\framet{Scan --- |RPow (LVec N3) N3|}{
+\vspace{-2ex}
+\wfig{4.5in}{figures/lsums-rp3-lv3}
+}
+\framet{Scan --- |RPow (LPow Pair N2) N3|}{
+\vspace{-1ex}
+\wfig{4.7in}{figures/lsums-rp3-lp2}
+}
+
+\framet{Polynomial evaluation}{
+
+\vspace{-8ex}
+
+$$a_0 \cdot x^0 + \cdots + a_n \cdot x^n$$
+
+\vspace{2ex}
+
+\pause
+\begin{code}
+evalPoly ::  (LScan f, Applicative f, Foldable f, Num a) =>
+             And1 f a -> a -> a
+evalPoly coeffs x = coeffs <.> powers x
+
+SPACE
+
+powers ::  (LScan f, Applicative f, Num a) =>
+           a -> And1 f a
+powers = lproducts . pure
+\end{code}
+}
+
+\framet{Powers --- |RBin N4|}{
+\vspace{-5ex}
+\wfig{4.75in}{figures/powers-rt4}
+}
+
+\framet{Polynomial evaluation --- |RBin N4|}{
+\vspace{-1ex}
+\wfig{4.75in}{figures/evalPoly-rt4}
+}
+
+
+\framet{Fast Fourier transform}{
+
+DFT:
+$$X_k = \sum_{n=0}^{N-1} x_n e^{-\frac{2\pi i}{N} nk}$$
+
+\pause
+\vspace{7ex}
+
+FFT (Gauss / Cooley-Tukey):
+$$
+    \sum_{n_1=0}^{N_1-1} 
+      \left[ e^{-\frac{2\pi i}{N} n_1 k_2 } \right]
+      \left( \sum_{n_2=0}^{N_2-1} x_{N_1 n_2 + n_1}  
+              e^{-\frac{2\pi i}{N_2} n_2 k_2 } \right)
+      e^{-\frac{2\pi i}{N_1} n_1 k_1 }
+$$
+}
+\framet{Fast Fourier transform}{
+
+\pause
+
+\begin{code}
+class FFT f where
+  type FFO f :: * -> *
+  fft :: RealFloat a => f (Complex a) -> FFO f (Complex a)
+
+SPACE
+
+instance FFT Par1 where
+  type FFO Par1 = Par1
+  fft = id
+
+instance FFT Pair where
+  type FFO Pair = Pair
+  fft (a :# b) = (a + b) :# (a - b)
+\end{code}
+
+}
+
+\framet{FFT --- composition (Gauss / Cooley-Tukey)}{
+\begin{code}
+instance ... => FFT (g :.: f) where
+  type FFO (g :.: f) = FFO f :.: FFO g
+  fft = O . traverse fft . twiddle . traverse fft . transpose . unO
+
+SPACE
+
+twiddle :: ... => g (f (Complex a)) -> g (f (Complex a))
+twiddle = (zipWith.zipWith) (*) twiddles
+  where
+    n         = size @(g :.: f)
+    twiddles  = fmap powers (powers omega)
+    omega     = cis (- 2 * pi / fromIntegral n)
+    cis a     = cos a :+ sin a
+\end{code}
+}
+
+\framet{FFT --- |RBin N3| (``Decimation in time'')}{
+\vspace{-4ex}
+\wfig{4.75in}{figures/fft-rt3}
+}
+
+\framet{FFT --- |LBin N3| (``Decimation in frequency'')}{
+\vspace{-1ex}
+\wfig{4.75in}{figures/fft-lt3}
+}
+
+\framet{Bitonic sort}{
+
+}
+
+\framet{Bitonic sort --- depth 1}{
+\vspace{0ex}
+\wfig{4.75in}{figures/bitonic-up-1}
+}
+
+\framet{Bitonic sort --- depth 2}{
+\vspace{-3ex}
+\wfig{4.75in}{figures/bitonic-up-2}
+}
+
+\framet{Bitonic sort --- depth 3}{
+\vspace{-3ex}
+\wfig{4.75in}{figures/bitonic-up-3}
+}
+
+\framet{Bitonic sort --- depth 4}{
+\vspace{-4ex}
+\wfig{4.75in}{figures/bitonic-up-4}
+}
+
+\framet{Why functional programming?}{
+\pause
+\begin{itemize}\itemsep 5ex
+\item
+  \wow{Parallelism} \note{Parallel-friendly}
+\item
+  Correctness \note{Practical \& precise reasoning.}
+\item
+  Productivity \note{Captures high-level programming patterns formally for reuse.
+  Code is a liability.}
+\end{itemize}
+}
+
+%if False
+\framet{What is functional programming?}{
+\begin{itemize}\itemsep 3ex
+\item
+  Value-oriented \note{as opposed to action-oriented}
+\item
+  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
+\end{itemize}
+}
+
+\framet{Finishes a shift that Fortran began}{
+\begin{itemize}\itemsep 3ex
+\item
+  Machine/assembly: statements only \note{Built up by sequencing.}
+\pitem
+  Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
+  Mainstream (imperative) languages are all Fortran variations.}
+\pitem
+  Functional: expressions only \note{With expressions like these, who needs statements?}
+\end{itemize}
+}
+%endif
 
 \end{document}

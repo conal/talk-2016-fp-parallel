@@ -2,7 +2,13 @@ TARG = fp-parallel
 
 .PRECIOUS: %.tex %.pdf %.web
 
-all: $(TARG).pdf
+default: $(TARG).pdf
+
+# For after bug that leaves a broken .aux
+oops: unaux default
+
+unaux:
+	rm -f $(TARG).aux $(TARG).pdf
 
 see: $(TARG).see
 
