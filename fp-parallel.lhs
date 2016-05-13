@@ -17,7 +17,7 @@
 %% \usepackage{pgfpages}
 %% \pgfpagesuselayout{4 on 1}[border shrink=1mm]
 
-\usefonttheme{serif}
+%% \usefonttheme{serif}
 
 \usepackage{beamerthemesplit}
 
@@ -30,12 +30,13 @@
 \usepackage{color}
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 
-\usepackage{wasysym}
+%% \usepackage{wasysym}
 
 \useinnertheme[shadow]{rounded}
-% \useoutertheme{default}
+\useoutertheme{default}
 \useoutertheme{shadow}
 \useoutertheme{infolines}
+
 % Suppress navigation arrows
 \setbeamertemplate{navigation symbols}{}
 
@@ -46,9 +47,9 @@
 %include greek.fmt
 %include mine.fmt
 
-\title{Functional programming and parallelism} % 
+\title[FP and parallelism]{Functional programming and parallelism} % 
 \author{\href{http://conal.net}{Conal Elliott}}
-\date{July 2012 / May 2016}
+\date[May 2016]{July 2012 / May 2016}
 
 \setlength{\itemsep}{2ex}
 \setlength{\parskip}{1ex}
@@ -63,49 +64,16 @@
 
 \begin{document}
 
+%% \frame{\titlepage}
+
+{ % local tweak
+\setbeamertemplate{footline}{}
 \frame{\titlepage}
-
-\title{FP and parallelism}
-\date{May 2016}
-
-%if False
-\framet{Why functional programming?}{
-
-\begin{itemize}\itemsep 3ex
-\item
-  Correctness \note{Practical \& precise reasoning.}
-\item
-  Productivity \note{Captures high-level programming patterns formally for reuse.
-  Code is a liability.}
-\item
-  \wow{Parallelism} \note{Parallel-friendly}
-\end{itemize}
 }
 
-\framet{What is functional programming?}{
-
-\begin{itemize}\itemsep 3ex
-\item
-  Value-oriented \note{as opposed to action-oriented}
-\item
-  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
-\end{itemize}
-}
-
-\framet{Finishes a shift that Fortran began}{
-
-\begin{itemize}\itemsep 3ex
-\item
-  Machine/assembly: statements only \note{Built up by sequencing.}
-\pitem
-  Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
-  Mainstream (imperative) languages are all Fortran variations.}
-\pitem
-  Functional: expressions only \note{With expressions like these, who needs statements?}
-\end{itemize}
-}
-
-%endif
+%% % Short form to fit
+%% \title{FP and parallelism}
+%% \date{May 2016}
 
 \framet{What makes a language good for parallelism?}{
 
@@ -174,7 +142,7 @@ Antoine de Saint-Exup\'ery
 \item
   Compute all at once?
 \item
-  Oops -- dependencies.
+  Oops --- dependencies.
 \item
   Minimize dependencies!
 \end{itemize}
@@ -236,9 +204,9 @@ Antoine de Saint-Exup\'ery
 \end{itemize}
 }
 
-\framet{Stateless programming}{
+\framet{Programming without state}{
 
-\begin{itemize}\itemsep 5ex
+\begin{itemize}\itemsep 3ex
 \item
   Programming is calculation/math:\vspace{1.5ex}
   \begin{itemize}\itemsep 2ex
@@ -249,7 +217,8 @@ Antoine de Saint-Exup\'ery
   \end{itemize}
 \item
   No loss of expressiveness!
-\item
+\vspace{2ex}
+\pitem
   ``Functional programming'' (value-oriented) \note{as opposed to action-oriented}
 \item
   Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
@@ -313,10 +282,11 @@ foldr op e (a:as)  = a `op` foldr op e as
 }
 
 \framet{Sequential sum --- right}{
+\vspace{1ex}
 \wfig{4.75in}{figures/sum-rvec6-no-opt}
 }
 
-\framet{Parallel sum -- how?}{
+\framet{Parallel sum --- how?}{
 
 Left-associated sum:
 
@@ -499,7 +469,7 @@ scanl op acc (B u v)  = (B u' v', vTot)
 \end{itemize}
 }
 
-\framet{Parallel prefix sums}{
+\framet{Parallel prefix sums on trees}{
 
 On trees:
 
@@ -526,16 +496,16 @@ scan (B u v)  = (B u' (fmap adjust v'), adjust vTot)
 }
 
 \framet{Balanced parallel prefix sums --- depth 2, unoptimized}{
-\vspace{-1ex}
-\wfig{4.75in}{figures/lsums-rt2-no-opt}
+\vspace{-7ex}
+\wfig{4.75in}{figures/lsumsp-rt2-no-hash-no-opt}
 }
 \framet{Balanced parallel prefix sums --- depth 3, unoptimized}{
 \vspace{-1.5ex}
-\wfig{4.5in}{figures/lsums-rt3-no-opt}
+\wfig{4.5in}{figures/lsumsp-rt3-no-hash-no-opt}
 }
 \framet{Balanced parallel prefix sums --- depth 4, unoptimized}{
 \vspace{-2ex}
-\wfig{4.25in}{figures/lsums-rt4-no-opt}
+\wfig{4.25in}{figures/lsumsp-rt4-no-hash-no-opt}
 }
 
 \framet{Balanced parallel prefix sums --- depth 2, optimized}{
@@ -599,6 +569,42 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 
 %endif
 
+\framet{Why functional programming?}{
+\pause
+\begin{itemize}\itemsep 3ex
+\item
+  \wow{Parallelism} \note{Parallel-friendly}
+\item
+  Correctness \note{Practical \& precise reasoning.}
+\item
+  Productivity \note{Captures high-level programming patterns formally for reuse.
+  Code is a liability.}
+\end{itemize}
+}
+
+%if False
+\framet{What is functional programming?}{
+\begin{itemize}\itemsep 3ex
+\item
+  Value-oriented \note{as opposed to action-oriented}
+\item
+  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
+\end{itemize}
+}
+
+\framet{Finishes a shift that Fortran began}{
+\begin{itemize}\itemsep 3ex
+\item
+  Machine/assembly: statements only \note{Built up by sequencing.}
+\pitem
+  Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
+  Mainstream (imperative) languages are all Fortran variations.}
+\pitem
+  Functional: expressions only \note{With expressions like these, who needs statements?}
+\end{itemize}
+}
+%endif
+
 \framet{Manual vs automatic placement}{
 
 \begin{itemize}\itemsep 3ex
@@ -616,9 +622,132 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 }
 
 %if False
-\framet{1977 Turing Award -- John Backus}{
+\framet{1977 Turing Award --- John Backus}{
 ~~~~~\includegraphics{BackusTuringPaperHighlight.png}
 }
 %endif
+
+\framet{R\&D agenda: elegant, massively parallel FP}{
+\begin{itemize}\itemsep 5ex
+\item
+  Algorithm design:\vspace{1.5ex}
+  \begin{itemize}\itemsep 2ex
+  \item Functional \& richly typed
+  \item Parallel-friendly
+  \item Easily composable
+  \end{itemize}
+\item
+  Compiling functional programs for highly parallel execution:\vspace{1.5ex}
+  \begin{itemize}\itemsep 2ex
+  \item Convert to algebraic vocabulary (CCC).
+  \item Interpret vocabulary as ``circuits'' (FPGA, silicon, GPU).
+  \item Other interpretations, e.g., automatic differentiation
+  \end{itemize}
+\end{itemize}
+}
+
+\framet{Composable data structures}{
+\pause
+\begin{minipage}[c]{0.63\textwidth}
+\begin{itemize}\itemsep 2ex
+\item Data structure tinker toys:\vspace{2ex}
+\begin{code}
+data  Empty        a = Empty
+data  Id           a = Id a
+data  (f  :+:  g)  a = L (f a) | R (g a)
+data  (f  :*:  g)  a = Prod (f a) (g a)
+data  (g  :.:  f)  a = Comp (g (f a))
+\end{code}
+\end{itemize}
+\begin{itemize}\itemsep 2ex
+\item Specify algorithm version for each.
+\item Automatic, type-directed composition.
+\end{itemize}
+\end{minipage}
+\begin{minipage}[c]{0.36\textwidth}
+\wpicture{1.5in}{figures/tinker-toy-bird}
+\end{minipage}
+}
+
+\nc\Id{\Varid{Id}}
+
+\framet{Vectors}{
+
+\vspace{-4ex}
+$$\overbrace{\Id \times \cdots \times \Id}^{n\text{~times}}$$
+
+Right-associated:
+\begin{code}
+type family RVec n where
+  RVec Z      = U1
+  RVec (S n)  = Par1 :*: RVec n
+\end{code}
+
+\vspace{2ex}
+
+Left-associated:
+\begin{code}
+type family LVec n where
+  LVec Z      = U1
+  LVec (S n)  = LVec n :*: Par1
+\end{code}
+}
+
+\nc\Pair{\Varid{Pair}}
+
+\framet{Binary trees}{
+
+\vspace{-2ex}
+$$\overbrace{\Pair \circ \cdots \circ \Pair}^{n\text{~times}}$$
+
+Right-associated:
+\begin{code}
+type family RBin n where
+  RBin Z      = Par1
+  RBin (S n)  = Pair :.: RBin n
+\end{code}
+
+\vspace{0ex}
+
+Left-associated:
+
+\begin{code}
+type family LBin n where
+  LBin Z      = Par1
+  LBin (S n)  = LBin n :.: Pair
+\end{code}
+
+\vspace{1ex}
+
+Uniform pairs:
+\begin{code}
+type Pair = Par1 :*: Par1
+\end{code}
+}
+
+\framet{Generalized trees}{
+
+\vspace{-3ex}
+$$\overbrace{h \circ \cdots \circ h}^{n\text{~times}}$$
+
+\vspace{0ex}
+
+Right-associated:
+\begin{code}
+type family RPow h n where
+  RPow h Z      = Par1
+  RPow h (S n)  = h :.: RPow h n
+\end{code}
+
+\vspace{1ex}
+
+Left-associated:
+
+\begin{code}
+type family LPow h n where
+  LPow h Z      = Par1
+  LPow h (S n)  = LPow h n :.: h
+\end{code}
+}
 
 \end{document}
