@@ -101,22 +101,29 @@
 
 \framet{Can we fix sequential languages?}{
 
-\begin{itemize}\itemsep 3ex
+\begin{itemize}\itemsep 5ex
 \item
+\begin{minipage}[c]{0.45\textwidth}
   Throw in parallel composition.
+\end{minipage}
+\begin{minipage}[c]{0.45\textwidth}
+\wfig{1.7in}{figures/hindenburg-over-new-york-1937}
+\end{minipage}
+
+\vspace{2ex}
+
+\begin{minipage}[c]{0.45\textwidth}
 \pitem
   Oops:\vspace{0.5ex}
-
-\begin{minipage}[c]{0.5\textwidth}
+ 
   \begin{itemize}\itemsep 2ex
     \item Nondeterminism
     \item Deadlock
     \item Intractable reasoning
   \end{itemize}
 \end{minipage}
-\pause
-\begin{minipage}[c]{0.3\textwidth}
-\includegraphics{yuk.png}
+\begin{minipage}[c]{0.45\textwidth}
+\wfig{1.4in}{figures/hindenburg-disaster-1937}
 \end{minipage}
 \end{itemize}
 }
@@ -138,10 +145,10 @@ Antoine de Saint-Exup\'ery
 
 \framet{Applications perform zillions of simple computations.}{
 
-\begin{itemize}\itemsep 3ex
+\begin{itemize}\itemsep 5ex
 \item
   Compute all at once?
-\item
+\pitem
   Oops --- dependencies.
 \item
   Minimize dependencies!
@@ -150,7 +157,7 @@ Antoine de Saint-Exup\'ery
 
 \framet{Dependencies}{
 
-\begin{itemize}\itemsep 3ex
+\begin{itemize}\itemsep 5ex
 \item
   Three sources:\vspace{2ex}
   \begin{enumerate}\itemsep 2.5ex
@@ -171,9 +178,9 @@ Antoine de Saint-Exup\'ery
 
 \begin{itemize}\itemsep 5ex
 \item
-  Built into sequencing: \(A\, ; B\)
+  Built into sequencing: $A\, ; B$
 \item
-  Semantics: \(B\) begins where \(A\) ends.
+  Semantics: $B$ begins where $A$ ends.
 \end{itemize}
 }
 
@@ -200,7 +207,7 @@ Antoine de Saint-Exup\'ery
 
 \begin{itemize}\itemsep 3ex
 \pitem
-  Contrast: ``\(A\, ; B\)'' vs ``\(A + B\)'' vs ``\((A + B) \times C\)''.
+  Contrast: ``$A\, ; B$'' vs ``$A + B$'' vs ``$(A + B) \times C$''.
 \end{itemize}
 }
 
@@ -484,9 +491,9 @@ scan (B u v)  = (B u' (fmap adjust v'), adjust vTot)
 
 \begin{itemize}\itemsep 2ex
 \item
-  If balanced, dependency depth \(O (\log n)\), work \(O (n \log n)\).
+  If balanced, dependency depth $O (\log n)$, work $O (n \log n)$.
 \item
-  Can reduce work to \(O (n)\).
+  Can reduce work to $O (n)$.
   \emph{(\href{https://github.com/conal/talk-2013-understanding-parallel-scan}{Understanding efficient parallel scan}).}
 \pitem
   Generalizes from trees.
@@ -750,7 +757,7 @@ instance LScan U1 where
 instance LScan Par1 where
   lscan (Par1 a) = And1 (Par1 mempty) a
 
-instance (LScan f, LFScan g)  => LScan (f :*: g) where
+instance (LScan f, LScan g)  => LScan (f :*: g) where
   lscan (Prod fa ga)  = And1 (Prod fa' ga') gx
    where
      And1 fa'  fx  = lscan fa
@@ -794,23 +801,31 @@ adjust a t = fmap (a `mappend`) t
 
 \vspace{-8ex}
 
+%% $$\sum_{0 \le i \le n} a_i \cdot x^i$$
+
 $$a_0 \cdot x^0 + \cdots + a_n \cdot x^n$$
 
 \vspace{2ex}
 
 \pause
 \begin{code}
-evalPoly ::  (LScan f, Applicative f, Foldable f, Num a) =>
-             And1 f a -> a -> a
 evalPoly coeffs x = coeffs <.> powers x
+\end{code}
 
-SPACE
-
-powers ::  (LScan f, Applicative f, Num a) =>
-           a -> And1 f a
+\pause
+\begin{code}
 powers = lproducts . pure
 \end{code}
+
+\begin{code}
+lproducts = underF Product lscan
+\end{code}
 }
+
+%% powers ::  (LScan f, Applicative f, Num a) =>
+%%            a -> And1 f a
+%% evalPoly ::  (LScan f, Applicative f, Foldable f, Num a) =>
+%%              And1 f a -> a -> a
 
 \framet{Powers --- |RBin N4|}{
 \vspace{-5ex}
@@ -831,8 +846,8 @@ $$X_k = \sum_{n=0}^{N-1} x_n e^{-\frac{2\pi i}{N} nk}$$
 \pause
 \vspace{7ex}
 
-FFT (Gauss / Cooley-Tukey):
-$$
+FFT for $N = N_1 \cdot N_2$ (Gauss / Cooley-Tukey):
+$$X_k = 
     \sum_{n_1=0}^{N_1-1} 
       \left[ e^{-\frac{2\pi i}{N} n_1 k_2 } \right]
       \left( \sum_{n_2=0}^{N_2-1} x_{N_1 n_2 + n_1}  
@@ -895,7 +910,7 @@ twiddle = (zipWith.zipWith) (*) twiddles
 }
 
 \framet{Bitonic sort --- depth 1}{
-\vspace{0ex}
+\vspace{0ex}m
 \wfig{4.75in}{figures/bitonic-up-1}
 }
 
@@ -910,7 +925,7 @@ twiddle = (zipWith.zipWith) (*) twiddles
 }
 
 \framet{Bitonic sort --- depth 4}{
-\vspace{-4ex}
+\vspace{-5ex}
 \wfig{4.75in}{figures/bitonic-up-4}
 }
 
