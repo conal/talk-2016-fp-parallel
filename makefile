@@ -26,7 +26,6 @@ showpdf = open -a Skim.app
 clean:
 	rm $(TARG).{tex,pdf,aux,nav,snm,ptb}
 
-
 web: web-token
 
 STASH=conal@conal.net:/home/conal/web/talks
@@ -35,3 +34,12 @@ web: web-token
 web-token: $(TARG).pdf
 	scp $? $(STASH)
 	touch $@
+
+
+%.pdf: %.dot Makefile
+	dot -Tpdf $< -o $@
+
+# .PRECIOUS: %.pdf
+
+push:
+	git push
