@@ -12,10 +12,10 @@ unaux:
 
 see: $(TARG).see
 
-%.pdf: %.tex Makefile
+%.pdf: %.tex makefile
 	pdflatex $*.tex
 
-%.tex: %.lhs macros.tex mine.fmt Makefile
+%.tex: %.lhs macros.tex mine.fmt makefile
 	lhs2TeX -o $*.tex $*.lhs
 
 showpdf = open -a Skim.app
@@ -32,11 +32,11 @@ STASH=conal@conal.net:/home/conal/web/talks
 web: web-token
 
 web-token: $(TARG).pdf
-	scp $? $(STASH)
+	scp $? $(STASH)/$(TARG)-2016.pdf
 	touch $@
 
 
-%.pdf: %.dot Makefile
+%.pdf: %.dot makefile
 	dot -Tpdf $< -o $@
 
 # .PRECIOUS: %.pdf
