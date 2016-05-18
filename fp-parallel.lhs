@@ -1,10 +1,10 @@
 %% -*- latex -*-
 
-% Presentation
-\documentclass{beamer}
+%% % Presentation
+%% \documentclass{beamer}
 
-%% % Printed
-%% \documentclass[handout]{beamer}
+% Printed
+\documentclass[handout]{beamer}
 
 %% % 2-up
 %% \usepackage{pgfpages}
