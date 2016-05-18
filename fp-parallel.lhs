@@ -49,7 +49,7 @@
 
 \title{Functional programming and parallelism} % 
 \author{\href{http://conal.net}{Conal Elliott}}
-\date[May 2016]{July 2012 / May 2016}
+\date{May 2016} % original: July 2012
 
 \setlength{\itemsep}{2ex}
 \setlength{\parskip}{1ex}
@@ -171,16 +171,19 @@ Antoine de Saint-Exup\'ery
   \end{enumerate}
 \item
   Goals: eliminate \#3, and reduce \#2.
+  % accept \#1
 \end{itemize}
 }
 
-\framet{Dependency in imperative languages}{
+\framet{Dependency in sequential languages}{
 
 \begin{itemize}\itemsep 5ex
 \item
   Built into sequencing: $A\, ; B$
 \item
   Semantics: $B$ begins where $A$ ends.
+\item
+  Why sequence?
 \end{itemize}
 }
 
@@ -191,7 +194,7 @@ Antoine de Saint-Exup\'ery
   And, with it,\vspace{1.5ex}
   \begin{itemize}\itemsep 1.5ex
     \item
-    mutation,
+    mutation (assignment),
   \item
     sequencing,
   \item
@@ -576,28 +579,41 @@ __global__ void scan(float *g_odata, float *g_idata, int n) {
 
 %endif
 
-\framet{Manual vs automatic placement}{
+\framet{Why functional programming?}{
 \pause
-\emph{\href{http://whyy.org/cms/radiotimes/2011/02/14/the-eniac-anniversary/}{ENIAC, 1946}}:
-\vspace{1ex}
-\hspace{2ex} \wpicture{4.3in}{figures/eniac-programming}
-}
-
-\framet{Manual vs automatic placement}{
-
-\begin{itemize}\itemsep 3ex
+\begin{itemize}\itemsep 5ex
 \item
-  Programmers used to explicitly place computations in space.
-\pitem
-  Mainstream programming \emph{still} manually places in time.
-\pitem
-  Sequential composition: crude placement tool.
+  \wow{Parallelism} \note{Parallel-friendly}
 \item
-  Threads: notationally clumsy \& hard to manage correctly.
+  Correctness \note{Practical \& precise reasoning.}
 \item
-  If we relinquish control, automation can do better.
+  Productivity \note{Captures high-level programming patterns formally for reuse.
+  Code is a liability.}
 \end{itemize}
 }
+
+%if False
+\framet{What is functional programming?}{
+\begin{itemize}\itemsep 3ex
+\item
+  Value-oriented \note{as opposed to action-oriented}
+\item
+  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
+\end{itemize}
+}
+
+\framet{Finishes a shift that Fortran began}{
+\begin{itemize}\itemsep 3ex
+\item
+  Machine/assembly: statements only \note{Built up by sequencing.}
+\pitem
+  Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
+  Mainstream (imperative) languages are all Fortran variations.}
+\pitem
+  Functional: expressions only \note{With expressions like these, who needs statements?}
+\end{itemize}
+}
+%endif
 
 %if False
 \framet{1977 Turing Award --- John Backus}{
@@ -929,40 +945,26 @@ twiddle = (zipWith.zipWith) (*) twiddles
 \wfig{4.75in}{figures/bitonic-up-4}
 }
 
-\framet{Why functional programming?}{
+\framet{Manual vs automatic placement}{
 \pause
-\begin{itemize}\itemsep 5ex
-\item
-  \wow{Parallelism} \note{Parallel-friendly}
-\item
-  Correctness \note{Practical \& precise reasoning.}
-\item
-  Productivity \note{Captures high-level programming patterns formally for reuse.
-  Code is a liability.}
-\end{itemize}
+\emph{\href{http://whyy.org/cms/radiotimes/2011/02/14/the-eniac-anniversary/}{ENIAC, 1946}}:
+\vspace{1ex}
+\hspace{2ex} \wpicture{4.3in}{figures/eniac-programming}
 }
 
-%if False
-\framet{What is functional programming?}{
-\begin{itemize}\itemsep 3ex
+\framet{Manual vs automatic placement}{
+\begin{itemize}\itemsep 4ex
 \item
-  Value-oriented \note{as opposed to action-oriented}
+  Programmers used to explicitly place computations in space.
+\pitem
+  Mainstream programming \emph{still} manually places in time.
+\pitem
+  Sequential composition: crude placement tool.
 \item
-  Like arithmetic on big values \note{strings, sequences, streams, trees, images, geometry, functions.}
+  Threads: notationally clumsy \& hard to manage correctly.
+\item
+  If we relinquish control, automation can do better.
 \end{itemize}
 }
-
-\framet{Finishes a shift that Fortran began}{
-\begin{itemize}\itemsep 3ex
-\item
-  Machine/assembly: statements only \note{Built up by sequencing.}
-\pitem
-  Fortran etc: statements + expressions \note{Expressions on RHSs. Nestable!
-  Mainstream (imperative) languages are all Fortran variations.}
-\pitem
-  Functional: expressions only \note{With expressions like these, who needs statements?}
-\end{itemize}
-}
-%endif
 
 \end{document}
