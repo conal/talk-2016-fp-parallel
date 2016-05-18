@@ -1,7 +1,5 @@
 %% -*- latex -*-
 
-%% %let atwork = True
-
 % Presentation
 \documentclass{beamer}
 
